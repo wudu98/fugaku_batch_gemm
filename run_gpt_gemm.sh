@@ -11,7 +11,7 @@ threads=$1
 export OMP_NUM_THREADS=${threads}
 
 MPIEXEC=""
-if [ threads -eq 48 ]; then
+if [ $threads -eq 48 ]; then
 	MPIEXEC="mpiexec -mca plm_ple_memory_allocation_policy interleave_all"
 fi
 
