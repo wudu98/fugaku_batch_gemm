@@ -196,5 +196,30 @@ int main(int argc, char *argv[]){
 		printf("%e sec, %f Gflops, eff=%f%%\n", dt[it], Gflops, 100.*ratio);
 	}
 
+	for(int i = 0; i < TB; i++){
+    	for(int j = 0; j < batch_size[i]; j++){
+			free(a[batch_head[i]+j]);
+			free(b[batch_head[i]+j]);
+			free(c[batch_head[i]+j]);
+			free(cref[batch_head[i]+j]);
+		}
+	}
+	free(a);
+	free(b);
+	free(c);
+	free(cref);
+  
+	free(batch_size);
+	free(batch_head);
+	free(m);
+	free(n);
+	free(k);
+	free(lda);
+	free(ldb);
+	free(ldc);
+	free(alpha);
+	free(beta);
+
+
 	return 0;
 }
