@@ -128,7 +128,7 @@ int main(int argc, char *argv[]){
 			for(int l = 0; l < a_alloc; l++){
 				a[batch_head[i]+j][l] = drand48();
 			}
-			for(int l = 0; l < a_alloc; l++){
+			for(int l = 0; l < b_alloc; l++){
 				b[batch_head[i]+j][l] = drand48();
 			}
 			for(int l = 0; l < c_alloc; l++){
