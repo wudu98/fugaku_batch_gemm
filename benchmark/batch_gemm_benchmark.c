@@ -191,7 +191,7 @@ int main(int argc, char *argv[]){
 		dt[it] = t1 - t0;
 	}
 	for(int it=0; it<iter; it++){
-		double Gflops = 2.0 * M * N * K / dt[it] * 1.e-9; 
+		double Gflops = 2.0 * TB * B * M * N * K / dt[it] * 1.e-9; 
 		double ratio = Gflops / peak;
 		printf("%e sec, %f Gflops, eff=%f%%\n", dt[it], Gflops, 100.*ratio);
 	}
