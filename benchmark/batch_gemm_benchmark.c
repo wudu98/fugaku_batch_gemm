@@ -188,17 +188,19 @@ int main(int argc, char *argv[]){
 		double t0 = omp_get_wtime();
 
 		omp_set_nested(1);
-		int ncore = omp_get_num_threads();
-		int parallel_batch = 4;
+		int num_threads = omp_get_num_threads();
+		int num_regions = 4;
+    	int threads_per_region = num_threads / num_regions;
+
 		
-		#pragma omp parallel for default(shared) collapse(2) num_threads(parallel_batch)
+		#pragma omp parallel for collapse(2) num_threads(num_regions)
 		for(int i = 0; i < TB; i++){
 			for(int j = 0; j < batch_size[i]; j++){
-				omp_set_num_threads(ncore/parallel_batch);
+				omp_set_num_threads(threads_per_region);
 				cblas_sgemm(layout, transa, transb, m[i], n[i], k[i], alpha[i], a[batch_head[i]+j], lda[i], b[batch_head[i]+j], ldb[i], beta[i], c[batch_head[i]+j], ldc[i]);
+				omp_set_num_threads(num_threads);
 			}
 		}
-
 
 		double t1 = omp_get_wtime();
 		dt[it] = t1 - t0;
