@@ -188,11 +188,12 @@ int main(int argc, char *argv[]){
 		double t0 = omp_get_wtime();
 
 		int ncore = omp_get_num_threads();
+		int parallel_batch = 6;
 		omp_set_nested(1);
-		#pragma omp parallel for collapse(2) num_threads(ncore/12)
 		for(int i = 0; i < TB; i++){
+			#pragma omp parallel for collapse(2) num_threads(parallel_batch)
 			for(int j = 0; j < batch_size[i]; j++){
-				omp_set_num_threads(12);
+				omp_set_num_threads(ncore/parallel_batch);
 				cblas_sgemm(layout, transa, transb, m[i], n[i], k[i], alpha[i], a[batch_head[i]+j], lda[i], b[batch_head[i]+j], ldb[i], beta[i], c[batch_head[i]+j], ldc[i]);
 			}
 		}
