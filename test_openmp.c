@@ -23,9 +23,11 @@ int main() {
         omp_set_num_threads(threads_per_region);
         report_num_threads(1);
 
-        #pragma omp parallel num_threads(threads_per_region)
+        #pragma omp parallel
         {
+            int thread_id = omp_get_thread_num();
             report_num_threads(2);
+            printf("Region %d, Thread %d\n", region_id, thread_id);
         }
 
         omp_set_num_threads(num_threads);
