@@ -176,11 +176,13 @@ int main(int argc, char *argv[]){
 // 	}
 
 	// benchmark
+	int ncore = omp_get_num_threads();
+	omp_set_nested(1);
 	double dt[iter];
 	for(int it=0; it<iter; it++){
 		double t0 = omp_get_wtime();
-#pragma omp parallel for
 		for(int i = 0; i < TB; i++){
+#pragma omp parallel for num_threads( ncore/12 )
 			for(int j = 0; j < batch_size[i]; j++){
 				cblas_sgemm(layout, transa, transb, m[i], n[i], k[i], alpha[i], a[batch_head[i]+j], lda[i], b[batch_head[i]+j], ldb[i], beta[i], c[batch_head[i]+j], ldc[i]);
 			}
