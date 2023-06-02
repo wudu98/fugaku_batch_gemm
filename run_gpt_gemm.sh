@@ -32,7 +32,7 @@ do
     N=$(( ${PS} * ${NH} * 3 / ${PD[$i]} ))
     K=${HS}
     echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K 96 0 10 0
+    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
 done
 
 for (( i=0; i<4; i++))
@@ -42,7 +42,7 @@ do
     N=${SL}
     K=${PS}
     echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K 96 0 10 0
+    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
 done
 
 for (( i=0; i<4; i++))
@@ -52,7 +52,7 @@ do
     N=${PS}
     K=${SL}
     echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K 96 0 10 0
+    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
 done
 
 for (( i=0; i<6; i++))
@@ -62,7 +62,7 @@ do
     N=${HS}
     K=$(( ${HS} / ${PD[$i]} ))
     echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K 96 0 10 0
+    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
 done
 
 for (( i=0; i<6; i++))
@@ -72,7 +72,7 @@ do
     N=$(( 4 * ${HS} / ${PD[$i]} ))
     K=${HS}
     echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K 96 0 10 0
+    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
 done
 
 for (( i=0; i<6; i++))
@@ -82,5 +82,5 @@ do
     N=${HS}
     K=$(( 4 * ${HS} / ${PD[$i]} ))
     echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K 96 0 10 0
+    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
 done

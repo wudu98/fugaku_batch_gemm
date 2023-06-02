@@ -1,5 +1,4 @@
-// Compile: fccpx -Nclang -Kopenmp gemm-gench.c -SSL2BLAMP
-// Benchmark for (NxK) x (KxM) -> (NxM) matmul in col-major
+// Compile: fccpx -Nclang -Kopenmp batch_gemm_benchmark.c -SSL2BLAMP
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,9 +12,9 @@
 typedef float typ;
 // typedef __fp16 typ;
 
-void dgemm_();
-void sgemm_();
-void fjblas_gemm_r16_();
+// void dgemm_();
+// void sgemm_();
+// void fjblas_gemm_r16_();
 
 // void matmul(int m, int n, int k, typ alpha, typ *a, int lda, typ *b, int ldb, typ beta, typ *c, int ldc){
 // 	if(8 == sizeof(typ)) dgemm_          ("N", "N", &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
@@ -39,8 +38,7 @@ double fp_peak(){
 }
 
 int main(int argc, char *argv[]){
-	int TB, B, M, N, K, padmn=96, padk=0, iter=5;
-	int do_verify=0;
+	int TB, B, M, N, K, padmn=96, padk=0, iter=5, do_verify=0;
 
   	if(argc>1) TB   = atoi(argv[1]);
   	if(argc>2) B    = atoi(argv[2]);
@@ -48,7 +46,7 @@ int main(int argc, char *argv[]){
 	if(argc>4) N    = atoi(argv[4]);
 	if(argc>5) K    = atoi(argv[5]);
 	if(argc>6) padmn = atoi(argv[6]);
-	if(argc>7) padk = atoi(argv[7]);
+	if(argc>7) padk  = atoi(argv[7]);
 	assert(argc>5);
 
 	printf("%d %d %d %d %d\n", TB, B, M, N, K);
@@ -157,7 +155,7 @@ int main(int argc, char *argv[]){
 // 		for(int i=0; i<M; i++){
 // 			for(int j=0; j<N; j++){
 // 				typ sum = 0.0;
-// 				for(int k=0; k<K; k++){
+// 				for(int p=0; k<K; k++){
 // 					sum += Ai,k) * B(k,j);
 // 				}
 // 				C(i,j) = sum;
@@ -181,6 +179,7 @@ int main(int argc, char *argv[]){
 	double dt[iter];
 	for(int it=0; it<iter; it++){
 		double t0 = omp_get_wtime();
+#pragma omp parallel for
 		for(int i = 0; i < TB; i++){
 			for(int j = 0; j < batch_size[i]; j++){
 				cblas_sgemm(layout, transa, transb, m[i], n[i], k[i], alpha[i], a[batch_head[i]+j], lda[i], b[batch_head[i]+j], ldb[i], beta[i], c[batch_head[i]+j], ldc[i]);
@@ -219,7 +218,6 @@ int main(int argc, char *argv[]){
 	free(ldc);
 	free(alpha);
 	free(beta);
-
 
 	return 0;
 }
