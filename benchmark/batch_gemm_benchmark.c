@@ -22,6 +22,13 @@ typedef float typ;
 // 	if(2 == sizeof(typ)) fjblas_gemm_r16_("N", "N", &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
 // }
 
+void report_num_threads(int level){
+	#pragma omp single
+	{
+		printf("Level: %d, number of threads = %d", level, omp_get_num_threads());
+	}
+}
+
 double fp_peak(){
 	int vlen = 64 / sizeof(typ);
 	int flop = vlen * 4; // dual fma
@@ -181,9 +188,10 @@ int main(int argc, char *argv[]){
 	double dt[iter];
 	for(int it=0; it<iter; it++){
 		double t0 = omp_get_wtime();
+#pragma omp parallel for collapse (2) num_threads(ncore/12)
 		for(int i = 0; i < TB; i++){
-#pragma omp parallel for num_threads( ncore/12 )
 			for(int j = 0; j < batch_size[i]; j++){
+				report_num_threads(1);
 				cblas_sgemm(layout, transa, transb, m[i], n[i], k[i], alpha[i], a[batch_head[i]+j], lda[i], b[batch_head[i]+j], ldb[i], beta[i], c[batch_head[i]+j], ldc[i]);
 			}
 		}
