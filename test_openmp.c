@@ -13,15 +13,15 @@ int main() {
     int num_regions = 4;
     int threads_per_region = 12;
 
-    omp_get_nested();
+    omp_set_nested(1);
     omp_set_num_threads(num_threads);
 
     #pragma omp parallel num_threads(num_regions)
     {
         int region_id = omp_get_thread_num();
 
-        omp_set_num_threads(threads_per_region);
         report_num_threads(1);
+        omp_set_num_threads(threads_per_region);
 
         #pragma omp parallel
         {
