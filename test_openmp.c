@@ -13,9 +13,7 @@ int main() {
     int num_regions = 4;
     int threads_per_region = 12;
 
-    printf("%d\n", omp_get_max_active_levels());
-    omp_set_max_active_levels(2);
-    printf("%d\n", omp_get_max_active_levels());
+    omp_get_nested();
     omp_set_num_threads(num_threads);
 
     #pragma omp parallel num_threads(num_regions)
@@ -25,7 +23,7 @@ int main() {
         omp_set_num_threads(threads_per_region);
         report_num_threads(1);
 
-        #pragma omp parallel num_threads(num_regions)
+        #pragma omp parallel num_threads(threads_per_region)
         {
             report_num_threads(2);
         }
