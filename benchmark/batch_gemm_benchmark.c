@@ -189,7 +189,7 @@ int main(int argc, char *argv[]){
 
 		int ncore = omp_get_num_threads();
 		omp_set_nested(1);
-		#pragma omp parallel collapse(2) num_threads(ncore/12)
+		#pragma omp parallel for collapse(2) num_threads(ncore/12)
 		for(int i = 0; i < TB; i++){
 			for(int j = 0; j < batch_size[i]; j++){
 				omp_set_num_threads(12);
