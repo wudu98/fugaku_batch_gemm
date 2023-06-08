@@ -30,16 +30,13 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 
 for (( layout_=0; layout_<2; layout_++))
 do
-    echo -n "layout_: " $layout_ 
     for (( transa_=0; transa_<2; transa_++))
     do
-        echo -n $transa_ 
         for (( transb_=0; transb_<2; transb_++))
         do
-            echo -n $transb_ 
             for (( parallel_mode_=0; parallel_mode_<2; parallel_mode_++))
             do
-                echo -n $parallel_mode_ 
+                echo  "layout_: " $layout_ $transa_ $transb_ $parallel_mode_ 
                 for (( i=0; i<6; i++))
                 do
                     B=1
@@ -47,7 +44,7 @@ do
                     N=$(( ${PS} * ${NH} * 3 / ${PD[$i]} ))
                     K=${HS}
                     echo -n $TB "," $B "," $M "," $N "," $K ","
-                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ 0
                 done
 
                 for (( i=0; i<4; i++))
@@ -77,7 +74,7 @@ do
                     N=${HS}
                     K=$(( ${HS} / ${PD[$i]} ))
                     echo -n $TB "," $B "," $M "," $N "," $K ","
-                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ 0
                 done
 
                 for (( i=0; i<6; i++))
@@ -87,7 +84,7 @@ do
                     N=$(( 4 * ${HS} / ${PD[$i]} ))
                     K=${HS}
                     echo -n $TB "," $B "," $M "," $N "," $K ","
-                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ 0
                 done
 
                 for (( i=0; i<6; i++))
@@ -97,7 +94,7 @@ do
                     N=${HS}
                     K=$(( 4 * ${HS} / ${PD[$i]} ))
                     echo -n $TB "," $B "," $M "," $N "," $K ","
-                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ 0
                 done
             done
         done

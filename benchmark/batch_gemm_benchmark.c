@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
 
 	assert(argc>5);
 
-	printf("%d %d %d %d %d\n", TB, B, M, N, K);
+	printf("%d%d%d%d, %d %d %d %d %d\n", layout_, transa_, transb_, parallel_mode_, TB, B, M, N, K);
 
 	CBLAS_LAYOUT layout = layout_==0 ? CblasRowMajor : CblasColMajor;
 	CBLAS_TRANSPOSE transa = transa_==0 ? CblasNoTrans : CblasTrans;
