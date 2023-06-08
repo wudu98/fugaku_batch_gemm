@@ -22,7 +22,10 @@ NH=56
 TB=1
 PD=(1 2 4 8 16 32)
 
-cd ./benchmark
+cd ./my_blas_src
+make -s
+
+cd ../benchmark
 make -s
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
