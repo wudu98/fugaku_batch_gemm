@@ -25,6 +25,8 @@ PD=(1 2 4 8 16 32)
 cd ./benchmark
 make -s
 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+
 for (( i=0; i<6; i++))
 do
     B=1
