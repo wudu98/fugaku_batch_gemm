@@ -8,6 +8,8 @@
 
 #include <cblas.h>
 
+#include "my_blas.h"
+
 typedef float typ;
 
 void report_num_threads(int level){

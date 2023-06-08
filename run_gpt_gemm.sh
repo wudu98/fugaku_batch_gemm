@@ -22,11 +22,7 @@ NH=56
 TB=1
 PD=(1 2 4 8 16 32)
 
-cd ./my_blas_src
-make clean
-make -s
-
-cd ../benchmark
+cd ./benchmark
 make clean
 make -s
 
