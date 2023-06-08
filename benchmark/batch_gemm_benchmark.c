@@ -1,6 +1,12 @@
 // Compile: fccpx -Nclang -Kopenmp batch_gemm_benchmark.c -SSL2BLAMP
 
-#include "my_blas.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <assert.h>
+#include <omp.h>
+
+#include <cblas.h>
 
 typedef float typ;
 
