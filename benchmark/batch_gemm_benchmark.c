@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
-#include <omp.h>
-#include <cblas.h>
 
 #include "my_blas.h"
 
