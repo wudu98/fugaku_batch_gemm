@@ -1,6 +1,6 @@
 CC=fcc
-CCFLAG=-std=gnu11 -Nclang -Kfast,ocl,openmp
-BLAS=-SSL2BLAMP -lm -lfjomp
+CCFLAG=-std=gnu11 -Nclang -Kfast,ocl,openmp -I../include -L../ori_blas_src
+BLAS=-SSL2BLAMP -lm -lfjomp -liboriblas
 SRC=batch_gemm_benchmark.c
 EXE=batch_gemm_benchmark
 

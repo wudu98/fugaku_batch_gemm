@@ -32,9 +32,6 @@ double fp_peak(){
 	return Gflops;
 }
 
-void my_blas_batch_sgemm(const int batch_count, const int *batch_size, const int *batch_head, const CBLAS_LAYOUT layout, const CBLAS_TRANSPOSE transa, const CBLAS_TRANSPOSE transb, const int* m, const int* n, const int* k, const float* alpha, const float ** a, const int* lda, const float ** b, const int* ldb, const float* beta, float ** c, const int* ldc);
-
-
 int main(int argc, char *argv[]){
 	int TB, B, M, N, K, padmn=96, padk=0, iter=5, do_verify=0;
 
