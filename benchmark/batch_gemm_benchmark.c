@@ -33,21 +33,27 @@ double fp_peak(){
 
 int main(int argc, char *argv[]){
 	int TB, B, M, N, K, padmn=96, padk=0, iter=3, do_verify=0;
+	int layout_=0, transa_=0, transb_=0, parallel_mode_=0;
 
   	if(argc>1) TB   = atoi(argv[1]);
   	if(argc>2) B    = atoi(argv[2]);
 	if(argc>3) M    = atoi(argv[3]);
 	if(argc>4) N    = atoi(argv[4]);
 	if(argc>5) K    = atoi(argv[5]);
-	if(argc>6) padmn = atoi(argv[6]);
-	if(argc>7) padk  = atoi(argv[7]);
+	if(argc>6) layout_  = atoi(argv[6]);
+	if(argc>7) transa_  = atoi(argv[7]);
+	if(argc>8) transb_  = atoi(argv[8]);
+	if(argc>9) parallel_mode_ = atoi(argv[9]);
+	if(argc>10) padmn = atoi(argv[10]);
+	if(argc>11) padk  = atoi(argv[11]);
+
 	assert(argc>5);
 
 	printf("%d %d %d %d %d\n", TB, B, M, N, K);
 
-	CBLAS_LAYOUT layout = CblasRowMajor;
-	CBLAS_TRANSPOSE transa = CblasNoTrans;
-	CBLAS_TRANSPOSE transb = CblasNoTrans;
+	CBLAS_LAYOUT layout = layout_==0 ? CblasRowMajor : CblasColMajor;
+	CBLAS_TRANSPOSE transa = transa_==0 ? CblasNoTrans : CblasTrans;
+	CBLAS_TRANSPOSE transb = transb_==0 ? CblasNoTrans : CblasTrans;
 
 	size_t align = 256;
 	int *batch_size    = aligned_alloc(align, sizeof(int) * TB);
@@ -138,13 +144,13 @@ int main(int argc, char *argv[]){
 	double peak = fp_peak();
 
 	// dry run
-	my_blas_batch_sgemm(TB, batch_size, batch_head, layout, transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);
+	my_blas_batch_sgemm(parallel_mode_, TB, batch_size, batch_head, layout, transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);
 
 	// benchmark
 	double dt[iter];
 	for(int it=0; it<iter; it++){
 		double t0 = omp_get_wtime();
-		my_blas_batch_sgemm(TB, batch_size, batch_head, layout, transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);
+		my_blas_batch_sgemm(parallel_mode_, TB, batch_size, batch_head, layout, transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);
 		double t1 = omp_get_wtime();
 		dt[it] = t1 - t0;
 	}

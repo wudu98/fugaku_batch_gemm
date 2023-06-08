@@ -28,62 +28,78 @@ make -s
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 
-for (( i=0; i<6; i++))
+for (( layout_=0; layout_<2; layout_++))
 do
-    B=1
-    M=${SL}
-    N=$(( ${PS} * ${NH} * 3 / ${PD[$i]} ))
-    K=${HS}
-    echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
-done
+    echo -n "layout_: " $layout_ 
+    for (( transa_=0; transa_<2; transa_++))
+    do
+        echo -n $transa_ 
+        for (( transb_=0; transb_<2; transb_++))
+        do
+            echo -n $transb_ 
+            for (( parallel_mode_=0; parallel_mode_<2; parallel_mode_++))
+            do
+                echo -n $parallel_mode_ 
+                for (( i=0; i<6; i++))
+                do
+                    B=1
+                    M=${SL}
+                    N=$(( ${PS} * ${NH} * 3 / ${PD[$i]} ))
+                    K=${HS}
+                    echo -n $TB "," $B "," $M "," $N "," $K ","
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                done
 
-for (( i=0; i<4; i++))
-do
-    B=$(( ${NH} / ${PD[$i]} ))
-    M=${SL}
-    N=${SL}
-    K=${PS}
-    echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
-done
+                for (( i=0; i<4; i++))
+                do
+                    B=$(( ${NH} / ${PD[$i]} ))
+                    M=${SL}
+                    N=${SL}
+                    K=${PS}
+                    echo -n $TB "," $B "," $M "," $N "," $K ","
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                done
 
-for (( i=0; i<4; i++))
-do
-    B=$(( ${NH} / ${PD[$i]} ))
-    M=${SL}
-    N=${PS}
-    K=${SL}
-    echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
-done
+                for (( i=0; i<4; i++))
+                do
+                    B=$(( ${NH} / ${PD[$i]} ))
+                    M=${SL}
+                    N=${PS}
+                    K=${SL}
+                    echo -n $TB "," $B "," $M "," $N "," $K ","
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                done
 
-for (( i=0; i<6; i++))
-do
-    B=1
-    M=${SL}
-    N=${HS}
-    K=$(( ${HS} / ${PD[$i]} ))
-    echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
-done
+                for (( i=0; i<6; i++))
+                do
+                    B=1
+                    M=${SL}
+                    N=${HS}
+                    K=$(( ${HS} / ${PD[$i]} ))
+                    echo -n $TB "," $B "," $M "," $N "," $K ","
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                done
 
-for (( i=0; i<6; i++))
-do
-    B=1
-    M=${SL}
-    N=$(( 4 * ${HS} / ${PD[$i]} ))
-    K=${HS}
-    echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
-done
+                for (( i=0; i<6; i++))
+                do
+                    B=1
+                    M=${SL}
+                    N=$(( 4 * ${HS} / ${PD[$i]} ))
+                    K=${HS}
+                    echo -n $TB "," $B "," $M "," $N "," $K ","
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                done
 
-for (( i=0; i<6; i++))
-do
-    B=1
-    M=${SL}
-    N=${HS}
-    K=$(( 4 * ${HS} / ${PD[$i]} ))
-    echo -n $TB "," $B "," $M "," $N "," $K ","
-    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K
+                for (( i=0; i<6; i++))
+                do
+                    B=1
+                    M=${SL}
+                    N=${HS}
+                    K=$(( 4 * ${HS} / ${PD[$i]} ))
+                    echo -n $TB "," $B "," $M "," $N "," $K ","
+                    $MPIEXEC ./batch_gemm_benchmark $TB $B $M $N $K $layout_ $transa_ $transb_ $parallel_mode_
+                done
+            done
+        done
+    done
 done

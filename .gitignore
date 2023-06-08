@@ -2,3 +2,4 @@
 a.out
 *.so
 *.a
+.vscode
