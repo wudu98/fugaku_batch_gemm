@@ -13,7 +13,7 @@ OBJS = $(OBJS_SRC)
 all : $(LIB_BATCHED_BLAS_SO)
 
 $(LIB_BATCHED_BLAS_SO) : $(OBJS)
-	$(CC) -fPIC -shared -o $(LIB_BATCHED_BLAS_SO) $(OBJS) $(BLAS)
+	$(CC) -fPIC -shared -o $(LIB_BATCHED_BLAS_SO) $(OBJS)
 
 .c.o :
 	$(CC) $(CCFLAG) -c $< $(DEF)
