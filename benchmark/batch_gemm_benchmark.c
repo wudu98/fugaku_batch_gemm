@@ -33,7 +33,7 @@ double fp_peak(){
 }
 
 int main(int argc, char *argv[]){
-	int TB, B, M, N, K, padmn=96, padk=0, iter=5, do_verify=0;
+	int TB, B, M, N, K, padmn=96, padk=0, iter=3, do_verify=0;
 
   	if(argc>1) TB   = atoi(argv[1]);
   	if(argc>2) B    = atoi(argv[2]);
