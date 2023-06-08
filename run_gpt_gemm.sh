@@ -15,6 +15,8 @@ if [ $threads -eq 48 ]; then
 	MPIEXEC="mpiexec -mca plm_ple_memory_allocation_policy interleave_all"
 fi
 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/ori_blas_src
+
 PS=128
 HS=7168
 SL=2048
