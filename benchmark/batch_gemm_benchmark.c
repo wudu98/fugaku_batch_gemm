@@ -58,6 +58,10 @@ int main(int argc, char *argv[]){
 
 	printf("%d %d %d %d %d\n", TB, B, M, N, K);
 
+	CBLAS_LAYOUT layout = CblasRowMajor;
+	CBLAS_TRANSPOSE transa = CblasNoTrans;
+	CBLAS_TRANSPOSE transb = CblasNoTrans;
+
 	size_t align = 256;
 	int *batch_size    = aligned_alloc(align, sizeof(int) * TB);
 	int *batch_head    = aligned_alloc(align, sizeof(int) * TB);
@@ -87,9 +91,6 @@ int main(int argc, char *argv[]){
 	typ **c    = aligned_alloc(align, sizeof(typ *) * total_batch_size); assert(c);
 	typ **cref = aligned_alloc(align, sizeof(typ *) * total_batch_size); assert(cref);
 
-	CBLAS_LAYOUT layout = CblasRowMajor;
-	CBLAS_TRANSPOSE transa = CblasNoTrans;
-	CBLAS_TRANSPOSE transb = CblasNoTrans;
 	size_t a_alloc, b_alloc, c_alloc;
 	for(int i = 0; i < TB; i++){
 		m[i] = M;
@@ -196,9 +197,7 @@ int main(int argc, char *argv[]){
 		#pragma omp parallel for collapse(2) num_threads(num_regions)
 		for(int i = 0; i < TB; i++){
 			for(int j = 0; j < batch_size[i]; j++){
-				omp_set_num_threads(threads_per_region);
 				cblas_sgemm(layout, transa, transb, m[i], n[i], k[i], alpha[i], a[batch_head[i]+j], lda[i], b[batch_head[i]+j], ldb[i], beta[i], c[batch_head[i]+j], ldc[i]);
-				omp_set_num_threads(num_threads);
 			}
 		}
 
