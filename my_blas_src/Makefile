@@ -1,5 +1,5 @@
 CC=fcc
-CCFLAG=-std=gnu11 -Nclang -Kfast,ocl,openmp -fPIC
+CCFLAG=-std=gnu11 -Nclang -Kfast,ocl,openmp -fPIC -I../include/
 BLAS=-SSL2BLAMP -lm -lfjomp
 
 AR=ar

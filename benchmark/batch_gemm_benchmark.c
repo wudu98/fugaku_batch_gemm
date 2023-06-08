@@ -1,26 +1,8 @@
 // Compile: fccpx -Nclang -Kopenmp batch_gemm_benchmark.c -SSL2BLAMP
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <assert.h>
-#include <omp.h>
+#include "my_blas.h"
 
-#include <cblas.h>
-
-// typedef double typ;
 typedef float typ;
-// typedef __fp16 typ;
-
-// void dgemm_();
-// void sgemm_();
-// void fjblas_gemm_r16_();
-
-// void matmul(int m, int n, int k, typ alpha, typ *a, int lda, typ *b, int ldb, typ beta, typ *c, int ldc){
-// 	if(8 == sizeof(typ)) dgemm_          ("N", "N", &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
-// 	if(4 == sizeof(typ)) sgemm_          ("N", "N", &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
-// 	if(2 == sizeof(typ)) fjblas_gemm_r16_("N", "N", &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
-// }
 
 void report_num_threads(int level){
 	#pragma omp single
@@ -43,6 +25,11 @@ double fp_peak(){
 	printf("%d threads, peak: %f GFLOPs\n", ncore, Gflops);
 	return Gflops;
 }
+
+void my_blas_batch_sgemm(const int batch_count, const int *batch_size, const int *batch_head, const CBLAS_LAYOUT layout, const CBLAS_TRANSPOSE transa, const CBLAS_TRANSPOSE transb, const int* m, const int* n, const int* k, const float* alpha, const float ** a, const int* lda, const float ** b, const int* ldb, const float* beta, float ** c, const int* ldc){
+	printf("pre_loda Error!");
+}
+
 
 int main(int argc, char *argv[]){
 	int TB, B, M, N, K, padmn=96, padk=0, iter=5, do_verify=0;
@@ -151,56 +138,13 @@ int main(int argc, char *argv[]){
 	double peak = fp_peak();
 
 	// dry run
-	for(int i = 0; i < TB; i++){
-		for(int j = 0; j < batch_size[i]; j++){
-			cblas_sgemm(layout, transa, transb, m[i], n[i], k[i], alpha[i], a[batch_head[i]+j], lda[i], b[batch_head[i]+j], ldb[i], beta[i], c[batch_head[i]+j], ldc[i]);
-		}
-	}
-
-// 	// reference matmul
-// 	if(do_verify){
-// #pragma omp parallel for
-// 		for(int i=0; i<M; i++){
-// 			for(int j=0; j<N; j++){
-// 				typ sum = 0.0;
-// 				for(int p=0; k<K; k++){
-// 					sum += Ai,k) * B(k,j);
-// 				}
-// 				C(i,j) = sum;
-// 			}
-// 		}
-
-
-// 		double err_max = 0.0;
-// 		for(int i=0; i<M; i++){
-// 			for(int j=0; j<N; j++){
-// 				double val = c   [i + ldc*j];
-// 				double ref = cref[i + ldc*j];
-// 				double err = fabs(val - ref);
-// 				err_max = fmax(err_max, err);
-// 			}
-// 		}
-// 		printf("verify: err_max=%e\n", err_max);
-// 	}
+	my_blas_batch_sgemm(TB, batch_size, batch_head, layout, transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);
 
 	// benchmark
 	double dt[iter];
 	for(int it=0; it<iter; it++){
 		double t0 = omp_get_wtime();
-
-		omp_set_nested(1);
-		int num_threads = omp_get_num_threads();
-		int num_regions = 4;
-    	int threads_per_region = num_threads / num_regions;
-
-		
-		#pragma omp parallel for collapse(2) num_threads(num_regions)
-		for(int i = 0; i < TB; i++){
-			for(int j = 0; j < batch_size[i]; j++){
-				cblas_sgemm(layout, transa, transb, m[i], n[i], k[i], alpha[i], a[batch_head[i]+j], lda[i], b[batch_head[i]+j], ldb[i], beta[i], c[batch_head[i]+j], ldc[i]);
-			}
-		}
-
+		my_blas_batch_sgemm(TB, batch_size, batch_head, layout, transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc);
 		double t1 = omp_get_wtime();
 		dt[it] = t1 - t0;
 	}
