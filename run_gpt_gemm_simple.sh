@@ -32,7 +32,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./benchmark
 layout_=1
 transa_=0
 transb_=0
-parallel_mode_0
+parallel_mode_=0
 
 echo  "layout_: " $layout_ $transa_ $transb_ $parallel_mode_ 
 for (( i=0; i<6; i++))
