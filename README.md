@@ -3,7 +3,7 @@
 **Compilation**
 
 ```
- # run on Login node
+ # run on Computing node
  bash ./build_my_lib.sh
 ```
 
